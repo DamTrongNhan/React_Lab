@@ -1,12 +1,24 @@
 import { useEffect, useState } from "react";
+
 import { fetchAllUser } from "../services/UserService";
+
 import Table from "react-bootstrap/Table";
 import ReactPaginate from "react-paginate";
 
+import ModalAddNew from "./ModalAddNewUser";
+
+import { FaPlus } from "react-icons/fa";
+
 const TableUsers = (props) => {
   const [listUsers, setListUsers] = useState([]);
-  const [totalUsers, setTotalUsers] = useState(0);
+  // const [totalUsers, setTotalUsers] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+
+  const [isShowModalAddNew, setIsShowModalAddNew] = useState(false);
+
+  const handleClose = () => {
+    setIsShowModalAddNew(false);
+  };
 
   useEffect(() => {
     getUsers(1);
@@ -17,15 +29,30 @@ const TableUsers = (props) => {
     if (res && res.data) {
       // console.log(res);
       setListUsers(res.data);
-      setTotalUsers(res.total);
+      // setTotalUsers(res.total);
       setTotalPages(res.total_pages);
     }
   };
   const handlePageClick = (Event) => {
     getUsers(+Event.selected + 1);
   };
+
+  const handleUpdateTable = (user) => {};
+
   return (
     <>
+      <div className="add-new my-3">
+        <span>
+          <b>List Users:</b>
+        </span>
+        <button
+          onClick={() => setIsShowModalAddNew(true)}
+          className="btn btn-primary d-flex justify-content-center align-items-center"
+        >
+          <FaPlus />
+        </button>
+      </div>
+
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -68,6 +95,8 @@ const TableUsers = (props) => {
         containerClassName="pagination"
         activeClassName="active"
       />
+
+      <ModalAddNew show={isShowModalAddNew} handleClose={handleClose} />
     </>
   );
 };
