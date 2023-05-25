@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import _, { iteratee } from "lodash";
+import _, { iteratee, result } from "lodash";
 import { debounce } from "lodash";
 
 import { fetchAllUser } from "../services/UserService";
@@ -9,6 +9,8 @@ import Table from "react-bootstrap/Table";
 import Container from "react-bootstrap/Container";
 
 import ReactPaginate from "react-paginate";
+import { CSVLink, CSVDownload } from "react-csv";
+import Papa from "papaparse";
 
 import ModalAddNew from "./ModalAddNewUser";
 import ModalEditUser from "./ModalEditUser";
@@ -17,8 +19,11 @@ import ModalConfirm from "./ModalConfirm";
 import { FaPlus } from "react-icons/fa";
 import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa";
+import { FaFileImport } from "react-icons/fa";
 
 import "../scss/tableUser.scss";
+import { toast } from "react-toastify";
 
 const TableUsers = (props) => {
   const [listUsers, setListUsers] = useState([]);
@@ -36,6 +41,7 @@ const TableUsers = (props) => {
   const [sortField, setSortField] = useState("id");
 
   const [keyWord, setKeyWord] = useState("");
+  const [dataExport, setDataExport] = useState([]);
 
   const handleClose = () => {
     setIsShowModalAddNew(false);
@@ -109,7 +115,75 @@ const TableUsers = (props) => {
     } else {
       getUsers(1);
     }
-  }, 2000);
+  }, 500);
+
+  const getUsersExport = (event, done) => {
+    let result = [];
+    if (listUsers && listUsers.length > 0) {
+      result.push(["Id", "Email", "First name", "Last name"]);
+      listUsers.map((item, index) => {
+        let arr = [];
+        arr[0] = item.id;
+        arr[1] = item.email;
+        arr[2] = item.first_name;
+        arr[3] = item.last_name;
+        result.push(arr);
+      });
+      setDataExport(result);
+      done(0);
+    }
+  };
+
+  const handleImportCSV = (event) => {
+    if (event.target && event.target.files && event.target.files[0]) {
+      let file = event.target.files[0];
+
+      if (file.type !== "text/csv") {
+        toast.error("Only accept csv file...");
+        return;
+      }
+
+      Papa.parse(file, {
+        // header: true,
+        complete: function (results) {
+          let rawCSV = results.data;
+          if (rawCSV.length > 0) {
+            if (rawCSV[0] && rawCSV[0].length === 3) {
+              if (
+                rawCSV[0][0] === "email" &&
+                rawCSV[0][1] === "first_name" &&
+                rawCSV[0][2] === "last_name"
+              ) {
+                let result = [];
+                rawCSV.map((item, index) => {
+                  if (index > 0 && item.length === 3) {
+                    let obj = {};
+                    obj.email = item[0];
+                    obj.first_name = item[1];
+                    obj.last_name = item[2];
+                    result.push(obj);
+                  }
+                });
+                console.log(result);
+                setListUsers(result);
+              } else {
+                toast.error("Wrong format header csv file");
+                return;
+              }
+            } else {
+              toast.error("Wrong format csv file");
+              return;
+            }
+          } else {
+            toast.error("Not found data on CSV file");
+            return;
+          }
+        },
+      });
+    } else {
+      toast.error("Not found file");
+    }
+  };
 
   return (
     <>
@@ -118,12 +192,34 @@ const TableUsers = (props) => {
           <span>
             <b>List Users:</b>
           </span>
-          <button
-            onClick={() => setIsShowModalAddNew(true)}
-            className="btn btn-primary d-flex justify-content-center align-items-center"
-          >
-            <FaPlus />
-          </button>
+          <div className="d-flex justify-content-center align-items-center gap-3">
+            <label htmlFor="import-csv">
+              <FaFileImport className="icon-csv" />
+            </label>
+            <input
+              type="file"
+              name=""
+              id="import-csv"
+              hidden
+              onChange={(event) => {
+                handleImportCSV(event);
+              }}
+            />
+            <CSVLink
+              data={dataExport}
+              filename={"users.csv"}
+              asyncOnClick={true}
+              onClick={getUsersExport}
+            >
+              <FaDownload className="icon-csv" />
+            </CSVLink>
+            <button
+              onClick={() => setIsShowModalAddNew(true)}
+              className="btn btn-primary d-flex justify-content-center align-items-center"
+            >
+              <FaPlus />
+            </button>
+          </div>
         </div>
 
         <div className="my-3 w-25">

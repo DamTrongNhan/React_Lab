@@ -1,3 +1,11 @@
+.app-container {
+  .add-new {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
 .sort-header {
   display: flex;
   justify-content: space-around;
@@ -6,10 +14,17 @@
     padding: 0 2px;
   }
 }
+
 tbody {
   tr {
     td {
       text-align: center;
     }
+  }
+}
+.add-new {
+  .icon-csv {
+    font-size: 28px;
+    color: blue;
   }
 }
