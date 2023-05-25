@@ -1,0 +1,15 @@
+.sort-header {
+  display: flex;
+  justify-content: space-around;
+  i {
+    cursor: pointer;
+    padding: 0 2px;
+  }
+}
+tbody {
+  tr {
+    td {
+      text-align: center;
+    }
+  }
+}

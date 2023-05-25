@@ -1,38 +1,43 @@
 import { Button, Modal, Form, Row } from "react-bootstrap";
-import { useState } from "react";
-import { createUser } from "../services/UserService";
+import { useEffect, useState } from "react";
+import { editUser } from "../services/UserService";
 import { toast } from "react-toastify";
 
-const ModalAddNew = (props) => {
-  const { show, handleClose, handleUpdateTable } = props;
+const ModalEditUser = (props) => {
+  const { show, handleClose, dataUserEdit, handleEditUserFromModal } = props;
   const [name, setName] = useState("");
   const [job, setJob] = useState("");
 
-  const handleSubmit = async (event) => {
+  useEffect(() => {
+    if (show) {
+      setName(dataUserEdit.first_name);
+    }
+  }, [dataUserEdit, show]);
+
+  const handleEditUser = async () => {
     try {
-      const res = await createUser(name, job);
-      setName("");
-      setJob("");
-      toast.success("A User is created succeed!");
-      console.log({ ...res });
-      handleUpdateTable({
-        email: "Mr.Bon",
-        id: res.id,
-        first_name: "Bon",
-        last_name: "Courage",
+      await editUser(name, job);
+      handleEditUserFromModal({
+        id: dataUserEdit.id,
+        first_name: name,
       });
       handleClose();
-    } catch (err) {
-      toast.error("Error....");
-      console.error(err);
+      toast.success(`You have successfully edited the user ${name}`);
+    } catch (error) {
+      console.error(error);
     }
   };
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+      >
         <Modal.Header closeButton>
-          <Modal.Title>Add new user</Modal.Title>
+          <Modal.Title>Edit a user</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -57,7 +62,7 @@ const ModalAddNew = (props) => {
                 <Form.Control
                   required
                   type="text"
-                  placeholder="Student"
+                  placeholder=""
                   value={job}
                   onChange={(event) => {
                     setJob(event.target.value);
@@ -81,8 +86,8 @@ const ModalAddNew = (props) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
-            Submit
+          <Button variant="primary" onClick={handleEditUser}>
+            Confirm
           </Button>
         </Modal.Footer>
       </Modal>
@@ -90,4 +95,4 @@ const ModalAddNew = (props) => {
   );
 };
 
-export default ModalAddNew;
+export default ModalEditUser;
