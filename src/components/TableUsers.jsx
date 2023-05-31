@@ -22,7 +22,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa";
 import { FaFileImport } from "react-icons/fa";
 
-import "../scss/tableUser.scss";
+import "../assets/style/tableUser.scss";
 import { toast } from "react-toastify";
 
 const TableUsers = (props) => {

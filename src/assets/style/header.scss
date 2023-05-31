@@ -1,0 +1,11 @@
+.nav-header {
+  text-decoration: none;
+}
+.navbar-nav {
+  .active {
+    font-weight: bold;
+  }
+  .dropdown-menu {
+    box-shadow: 3px 3px blue;
+  }
+}
