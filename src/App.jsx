@@ -9,7 +9,23 @@ import Login from "./components/Login";
 
 import { Routes, Route, Link } from "react-router-dom";
 
+import { UserContext } from "./context/UserContext";
+import { useContext } from "react";
+import { useEffect } from "react";
+
 function App() {
+  const { user, loginContext } = useContext(UserContext);
+
+  useEffect(() => {
+    if (localStorage.getItem("token") && localStorage.getItem("email")) {
+      loginContext(
+        JSON.parse(localStorage.getItem("email")),
+        JSON.parse(localStorage.getItem("token"))
+      );
+    }
+  }, []);
+  console.log(user);
+
   return (
     <>
       <div className="app-container">

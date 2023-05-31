@@ -1,14 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../assets/style/login.scss";
-import { NavLink } from "react-bootstrap";
 import { login } from "../services/UserService";
 import { toast } from "react-toastify";
+import { useNavigate, NavLink } from "react-router-dom";
 
+import { UserContext } from "../context/UserContext";
+import { useContext } from "react";
 const Login = () => {
+  const navigate = useNavigate();
+
+  const { loginContext } = useContext(UserContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [loadingApi, setLoadingApi] = useState(false);
+
+  // const handleAction = async () => {
+  //   return new Promise((resolve) => {
+  //     toast.success("Login successfully", {
+  //       autoClose: false,
+  //       closeOnClick: false,
+  //       onClose: () => resolve(true),
+  //     });
+  //   });
+  // };
+
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, []);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -17,12 +40,14 @@ const Login = () => {
       return;
     }
     try {
-      // const res = await login("eve.holt@reqres.in", "cityslicka");
       setLoadingApi(true);
+      // const res = await login("eve.holt@reqres.in", "cityslicka");
       const res = await login(email, password);
       if (res && res.token) {
-        toast.success("Login successfully");
-        localStorage.setItem("token", JSON.stringify(res.token));
+        loginContext(email, res.token);
+        // await handleAction();
+        toast.success("Login successfully")
+        navigate("/");
       } else {
         if (res && res.status === 400) {
           toast.error(res.data.error);
@@ -39,7 +64,7 @@ const Login = () => {
         <form className="form col-sm-4 col-12">
           <div className="title mb-3">Login</div>
           <div className="input-container col-12">
-            <label className="label mb-1">Username: </label>
+            <label className="label mb-1">Username: eve.holt@reqres.in</label>
             <input
               type="text"
               name="username"
@@ -50,7 +75,7 @@ const Login = () => {
             />
           </div>
           <div className="input-container col-12">
-            <label className="label mb-1">Password: </label>
+            <label className="label mb-1">Password: cityslicka</label>
             <div className="col-12 mb-2">
               <input
                 type={isShowPassword ? "text" : "password"}
@@ -70,7 +95,7 @@ const Login = () => {
               ></i>
             </div>
           </div>
-          <NavLink to="" className="forgotten-password mb-2">
+          <NavLink to="" className="forgotten-password mb-2 nav-link">
             Forgot password?
           </NavLink>
           <button
@@ -79,11 +104,11 @@ const Login = () => {
             onClick={handleLogin}
           >
             {/* &nbsp; */}
-            {loadingApi ? <i class="fa-solid fa-cog fa-spin"></i> :  "Login"}
+            {loadingApi ? <i className="fa-solid fa-cog fa-spin"></i> : "Login"}
           </button>
         </form>
         <div className="back mt-5">
-          <NavLink to="/" className="">
+          <NavLink to="/" className="nav-link">
             <i className="fa-solid fa-arrow-left me-2"></i> Back
           </NavLink>
         </div>
