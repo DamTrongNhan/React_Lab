@@ -3,15 +3,12 @@ import "./App.scss";
 import { ToastContainer } from "react-toastify";
 
 import Header from "./components/Header";
-import TableUsers from "./components/TableUsers";
-import Home from "./components/Home";
-import Login from "./components/Login";
-
-import { Routes, Route, Link } from "react-router-dom";
 
 import { UserContext } from "./context/UserContext";
 import { useContext } from "react";
 import { useEffect } from "react";
+
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
   const { user, loginContext } = useContext(UserContext);
@@ -24,17 +21,13 @@ function App() {
       );
     }
   }, []);
-  console.log(user);
+  // console.log(user);
 
   return (
     <>
       <div className="app-container">
         <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/users" element={<TableUsers />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
+        <AppRoutes />
       </div>
       <ToastContainer
         position="top-right"

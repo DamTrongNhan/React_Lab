@@ -3,7 +3,7 @@ import { Container } from "react-bootstrap";
 const Home = () => {
   return (
     <>
-      <Container>
+      <Container className="mt-3">
         <div className="">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi placeat
           ipsam minima laboriosam atque ipsum explicabo necessitatibus maxime

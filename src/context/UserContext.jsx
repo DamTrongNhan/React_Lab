@@ -18,6 +18,7 @@ const UserProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("email");
     setUser((user) => ({
       email: "",
       auth: false,
@@ -33,49 +34,3 @@ const UserProvider = ({ children }) => {
 
 export { UserContext, UserProvider };
 
-// // @function  UnauthApp
-// function UnauthApp() {
-//   const { loginContext } = React.useContext(UserContext);
-//   const [email, setemail] = React.useState();
-
-//   return (
-//     <>
-//       <h1>Please, log in!</h1>
-
-//       <label>email:</label>
-//       <input
-//         type="text"
-//         onChange={(event) => {
-//           setemail(event.target.value);
-//         }}
-//       />
-//       <button onClick={() => loginContext(email)}>Log in</button>
-//     </>
-//   );
-// }
-
-// // @function  AuthApp
-// function AuthApp() {
-//   const { user, logout } = React.useContext(UserContext);
-
-//   return (
-//     <>
-//       <h1>Hello, {user.email}!</h1>
-//       <button onClick={logout}>Logout</button>
-//     </>
-//   );
-// }
-
-// // @function  App
-// function App() {
-//   const { user } = React.useContext(UserContext);
-
-//   return user.auth ? <AuthApp /> : <UnauthApp />;
-// }
-
-// ReactDOM.render(
-//   <UserProvider>
-//     <App />
-//   </UserProvider>,
-//   document.getElementById("root")
-// );
