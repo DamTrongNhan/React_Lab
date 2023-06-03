@@ -11,15 +11,20 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import { UserProvider } from "./context/UserContext";
 
+import store from "./redux/store";
+import { Provider } from "react-redux";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  // <React.StrictMode>
-  <UserProvider>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </UserProvider>
-  // </React.StrictMode>
+  <Provider store={store}>
+    {/* <React.StrictMode> */}
+    <UserProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </UserProvider>
+    {/* </React.StrictMode> */}
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
