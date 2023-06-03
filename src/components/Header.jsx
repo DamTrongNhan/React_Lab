@@ -11,6 +11,7 @@ import logoApp from "../assets/image/logo512.png";
 import "../assets/style/header.scss";
 
 const Header = (props) => {
+
   const account = useSelector((state) => state.user.account);
   const dispatch = useDispatch();
   const navigate = useNavigate();

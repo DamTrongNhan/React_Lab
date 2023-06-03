@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import AppRoutes from "./routes/AppRoutes";
 import { useDispatch, useSelector } from "react-redux";
 import { handleRefresh } from "./redux/actions/userAction";
+
 import "./App.scss";
 function App() {
   const dispatch = useDispatch();
