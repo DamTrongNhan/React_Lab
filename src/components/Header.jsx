@@ -1,32 +1,32 @@
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { useLocation, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
-import "../assets/style/header.scss";
-import logoApp from "../assets/image/logo512.png";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+
+import { handleLogoutRedux } from "../redux/actions/userAction";
 import { toast } from "react-toastify";
 
-import { useContext } from "react";
-import { UserContext } from "../context/UserContext";
-import { useState, useEffect } from "react";
+import logoApp from "../assets/image/logo512.png";
+import "../assets/style/header.scss";
 
 const Header = (props) => {
-  // const location = useLocation();
-  const { logout, user } = useContext(UserContext);
-
-  // const [hideHeader, setHideHeader] = useState(false);
-
-  // useEffect(() => {
-  //   if (window.location.pathname === "/login") {
-  //     setHideHeader(true);
-  //   }
-  // }, []);
-
+  const account = useSelector((state) => state.user.account);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
-    logout();
-    toast.success("Logout successfully");
-    navigate("/");
+    dispatch(handleLogoutRedux());
   };
+  useEffect(() => {
+    if (
+      account &&
+      account.auth === false &&
+      window.location.pathname !== "/login"
+    ) {
+      toast.success("Logout successfully");
+      navigate("/");
+    }
+  }, [account]);
   return (
     <>
       <Navbar bg="light" expand="lg">
@@ -45,7 +45,8 @@ const Header = (props) => {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            {((user && user.auth) || window.location.pathname === "/") && (
+            {((account && account.auth) ||
+              window.location.pathname === "/") && (
               <>
                 <Nav className="me-auto">
                   <NavLink to="/" className="nav-header nav-link">
@@ -58,12 +59,12 @@ const Header = (props) => {
                 </Nav>
                 <Nav>
                   <div className="nav-link">
-                    {user && user.auth && user.email && (
-                      <span>Welcome {user.email}</span>
+                    {account && account.auth && account.email && (
+                      <span>Welcome {account.email}</span>
                     )}
                   </div>
                   <NavDropdown title="Setting" id="basic-nav-dropdown">
-                    {user && user.auth === true ? (
+                    {account && account.auth === true ? (
                       <NavDropdown.Item>
                         <span
                           onClick={handleLogout}
