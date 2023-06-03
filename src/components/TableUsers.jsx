@@ -188,11 +188,11 @@ const TableUsers = (props) => {
   return (
     <>
       <Container>
-        <div className="add-new my-3">
-          <span>
+        <div className="add-new my-3 d-sm-flex align-items-center justify-content-between">
+          <span className="col-12 col-sm-4">
             <b>List Users:</b>
           </span>
-          <div className="d-flex justify-content-center align-items-center gap-3">
+          <div className="d-flex mt-3 mt-sm-0 justify-content-sm-center justify-content-start align-items-center gap-3">
             <label htmlFor="import-csv">
               <FaFileImport className="icon-csv" />
             </label>
@@ -222,7 +222,7 @@ const TableUsers = (props) => {
           </div>
         </div>
 
-        <div className="my-3 w-25">
+        <div className="my-3 col-8 col-sm-4">
           <input
             type="text"
             className="form-control"
@@ -231,79 +231,80 @@ const TableUsers = (props) => {
             onChange={handleSearch}
           />
         </div>
-
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>
-                <div className="sort-header">
-                  <span>ID</span>
-                  <span className="">
-                    <i
-                      onClick={() => {
-                        handleSort("desc", "id");
-                      }}
-                      className="fa-solid fa-arrow-up"
-                    ></i>
-                    <i
-                      onClick={() => {
-                        handleSort("asc", "id");
-                      }}
-                      className="fa-solid fa-arrow-down"
-                    ></i>
-                  </span>
-                </div>
-              </th>
-              <th>Email</th>
-              <th>
-                <div className="sort-header">
-                  <span>First name</span>
-                  <span className="">
-                    <i
-                      onClick={() => {
-                        handleSort("desc", "first_name");
-                      }}
-                      className="fa-solid fa-arrow-up"
-                    ></i>
-                    <i
-                      onClick={() => {
-                        handleSort("asc", "first_name");
-                      }}
-                      className="fa-solid fa-arrow-down"
-                    ></i>
-                  </span>
-                </div>
-              </th>
-              <th>Last Name</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {listUsers &&
-              listUsers.length > 0 &&
-              listUsers.map((item, index) => {
-                return (
-                  <tr key={`users-${index}`}>
-                    <td>{item.id}</td>
-                    <td>{item.email}</td>
-                    <td>{item.first_name}</td>
-                    <td>{item.last_name}</td>
-                    <td className="text-center">
-                      <FaRegEdit
-                        className="me-3"
-                        onClick={() => handleEditUser(item)}
-                      />
-                      <FaRegTrashAlt
+        <div className="customize-table">
+          <Table striped bordered hover className="table-responsive">
+            <thead>
+              <tr>
+                <th>
+                  <div className="sort-header">
+                    <span>ID</span>
+                    <span className="">
+                      <i
                         onClick={() => {
-                          handleDeleteUser(item);
+                          handleSort("desc", "id");
                         }}
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </Table>
+                        className="fa-solid fa-arrow-up"
+                      ></i>
+                      <i
+                        onClick={() => {
+                          handleSort("asc", "id");
+                        }}
+                        className="fa-solid fa-arrow-down"
+                      ></i>
+                    </span>
+                  </div>
+                </th>
+                <th>Email</th>
+                <th>
+                  <div className="sort-header">
+                    <span>First name</span>
+                    <span className="">
+                      <i
+                        onClick={() => {
+                          handleSort("desc", "first_name");
+                        }}
+                        className="fa-solid fa-arrow-up"
+                      ></i>
+                      <i
+                        onClick={() => {
+                          handleSort("asc", "first_name");
+                        }}
+                        className="fa-solid fa-arrow-down"
+                      ></i>
+                    </span>
+                  </div>
+                </th>
+                <th>Last Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {listUsers &&
+                listUsers.length > 0 &&
+                listUsers.map((item, index) => {
+                  return (
+                    <tr key={`users-${index}`}>
+                      <td>{item.id}</td>
+                      <td>{item.email}</td>
+                      <td>{item.first_name}</td>
+                      <td>{item.last_name}</td>
+                      <td className="text-center">
+                        <FaRegEdit
+                          className="me-3"
+                          onClick={() => handleEditUser(item)}
+                        />
+                        <FaRegTrashAlt
+                          onClick={() => {
+                            handleDeleteUser(item);
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </Table>
+        </div>
         <ReactPaginate
           breakLabel="..."
           nextLabel="next >"

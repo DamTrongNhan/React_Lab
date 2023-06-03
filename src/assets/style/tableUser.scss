@@ -1,8 +1,5 @@
 .app-container {
   .add-new {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
   }
 }
 
@@ -27,4 +24,10 @@ tbody {
     font-size: 28px;
     color: blue;
   }
+}
+.customize-table {
+  overflow-x: auto;
+}
+.pagination {
+  justify-content: center !important;
 }

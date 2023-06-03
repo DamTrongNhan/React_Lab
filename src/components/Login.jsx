@@ -41,12 +41,11 @@ const Login = () => {
     }
     try {
       setLoadingApi(true);
-      // const res = await login("eve.holt@reqres.in", "cityslicka");
-      const res = await login(email, password);
+      const res = await login(email.trim(), password);
       if (res && res.token) {
         loginContext(email, res.token);
         // await handleAction();
-        toast.success("Login successfully")
+        toast.success("Login successfully");
         navigate("/");
       } else {
         if (res && res.status === 400) {
@@ -58,10 +57,17 @@ const Login = () => {
       console.log(err);
     }
   };
+
+  const handlePressEnter = async (event) => {
+    if (event && event.key === "Enter") {
+      await handleLogin(event);
+    }
+  };
+
   return (
     <>
       <div className="login-container">
-        <form className="form col-sm-4 col-12">
+        <form className="form col-sm-4 col-11 ">
           <div className="title mb-3">Login</div>
           <div className="input-container col-12">
             <label className="label mb-1">Username: eve.holt@reqres.in</label>
@@ -84,6 +90,7 @@ const Login = () => {
                 placeholder=""
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
+                onKeyDown={handlePressEnter}
               />
               <i
                 className={`fa-solid ${
